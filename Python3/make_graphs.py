@@ -24,20 +24,26 @@ INPUTS:
     - show_fig : True if the plot must be displayed on screen, False otherwise
     - (file_path) : path where the graph must be saved (if needed)
 --------------------------------------------------------------------------------------------------"""
-def plot_cft(signals, fft, legend, show_fig, file_path=None): 
+def plot_cft(signals, fft, legend, show_fig, file_path=None,discrete=[False,False]): 
     # One big figure to frame the whole
     fig = plt.figure(figsize=(12,3))
     ax1 = fig.add_subplot(121) 
 
     # Plot each time channel
     for idx, color in zip(range(1, signals.shape[0]), colors2):
-        ax1.plot(signals[0], signals[idx], linewidth=2, color = color, alpha=.7)
+        if discrete[0]:
+            ax1.stem(signals[0], signals[idx])
+        else:
+            ax1.plot(signals[0], signals[idx], linewidth=2, color = color, alpha=.7)
         ax1.set_xlabel('Time (sec)')
         
     # Plot each frequency channel
     ax2 = fig.add_subplot(122) 
-    for idx, color, label in zip(range(1, fft.shape[0]), colors2, legend):
-        ax2.plot(fft[0], fft[idx], label= label, linewidth=2, color = color, alpha=.7)
+    for idx, color in zip(range(1, fft.shape[0]), colors2):
+        if discrete[1]:
+            ax2.stem(fft[0], fft[idx])
+        else:
+            ax2.plot(fft[0], fft[idx], linewidth=2, color = color, alpha=.7)
         ax2.set_xlabel('Frequency (Hz)')
         ax2.legend(bbox_to_anchor=(1.04,1), loc="upper left") 
         
